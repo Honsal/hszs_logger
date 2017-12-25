@@ -1,3 +1,11 @@
+local hsl_debug = nil
+
+if (CLIENT) then
+	hsl_debug = CreateClientConVar("hsl_debug", "0")
+else
+	hsl_debug = CreateConVar("hsl_debug", "0")
+end
+
 HSLog = {}
 
 HSLog.ulxLog = function(text)
@@ -16,13 +24,15 @@ HSLog.a = function(text)
 end
 
 HSLog.d = function(sender, text, alert)
-	-- HSLog.LastMessage = text
-	text = (sender and (sender .. " @ ") or "") .. text
-	text = "[HSLog@Debug] " .. text
-	MsgC(Color(0, 255, 0), text .. "\n")
-	HSLog.ulxLog(text)
-	if alert then
-		PrintMessage(HUD_PRINTTALK, text)
+	if (hsl_debug:GetBool()) then
+		-- HSLog.LastMessage = text
+		text = (sender and (sender .. " @ ") or "") .. text
+		text = "[HSLog@Debug] " .. text
+		MsgC(Color(0, 255, 0), text .. "\n")
+		HSLog.ulxLog(text)
+		if alert then
+			PrintMessage(HUD_PRINTTALK, text)
+		end
 	end
 end
 
